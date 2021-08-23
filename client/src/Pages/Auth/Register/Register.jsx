@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Heading, Nav, Navicon, RegCont } from "./Register.styled";
 import { TextField, Button, Box, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import { Redirect, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   text: {
@@ -9,34 +11,58 @@ const useStyles = makeStyles({
     marginTop: "10px"
   }
 });
-const society = [
-  { soc_name: "candeur rise", val: "cr" },
-  { soc_name: "candeur fall", val: "cf" },
-  { soc_name: "candeur landmark", val: "cl" },
-  { soc_name: "candeur mark", val: "cm" }
-];
+
 const obj = {
   name: "",
   password: "",
   mobile: "",
-  society: ""
+  societyId: ""
 };
 
 export function Register() {
   const classes = useStyles();
-    const [societies] = React.useState(society);
-    const [state, setState] = React.useState(obj);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setState({ ...state,[name]:value})
-    }
-    const handleClick = (e) => {
-        var payload = {
-            ...state
-        }
-        console.log(payload)
-    }
+  const [societies, setSocieties] = React.useState([]);
+  const [state, setState] = React.useState(obj);
+  const history = useHistory();
+  const [token, setToken] = React.useState("");
+  const getSocietyData = () => {
+    axios.get("http://localhost:8000/society").then(res => {
+      setSocieties(res.data);
+    });
+  };
+  React.useEffect(() => {
+    getSocietyData();
+  }, []);
+  console.log(societies);
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+  const handleClick = () => {
+    var payload = {
+      name: state.name,
+      mobile: Number(state.mobile),
+      password: state.password,
+      societyId: state.society
+    };
+    // console.log(payload);
+    axios
+      .post("http://localhost:8000/user/register", payload)
+      .then(res => {
+        console.log(res.data.data);
+        setToken(res.data.token);
+        sessionStorage.setItem("user",JSON.stringify(res.data.data))
+        // history.push("/user/otpauth")
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+  if (token) {
+    <Redirect push to={"/auth/otpauth"} />;
+    history.push("/auth/otpauth")
+    setToken("")
+  }
   return (
     <Container>
       <Nav>
@@ -52,9 +78,16 @@ export function Register() {
           <TextField name="name" onChange={handleChange} className={classes.text} variant="outlined" label="Name" />
         </Box>
         <Box>
-          <TextField name="society" onChange={handleChange} className={classes.text} select variant="outlined" label="Select Society">
+          <TextField
+            name="society"
+            onChange={handleChange}
+            className={classes.text}
+            select
+            variant="outlined"
+            label="Select Society"
+          >
             {societies.map(el => {
-              return <MenuItem key={el.val} value={el.soc_name}>{el.soc_name}</MenuItem>;
+              return <MenuItem value={el._id}>{el.name}</MenuItem>;
             })}
           </TextField>
         </Box>
@@ -62,10 +95,16 @@ export function Register() {
           <TextField name="password" onChange={handleChange} className={classes.text} variant="outlined" label="Password" />
         </Box>
         <Box>
-          <TextField name="password" onChange={handleChange} className={classes.text} variant="outlined" label="Confirm Password" />
+          <TextField
+            name="password"
+            onChange={handleChange}
+            className={classes.text}
+            variant="outlined"
+            label="Confirm Password"
+          />
         </Box>
         <Box>
-          <Button onClick={handleClick} className={classes.text} variant="outlined" color="primary">
+          <Button onClick={handleClick} className={classes.text} variant="outlined" color="secondary">
             Register
           </Button>
         </Box>

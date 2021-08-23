@@ -12,7 +12,7 @@ const history=useHistory()
     <Container>
       <Nav>
         <Navicon>
-          <HomeIcon color="secondary" />
+          {/* <HomeIcon color="secondary" /> */}
           <Heading> Simplify Entry</Heading>
         </Navicon>
       </Nav>

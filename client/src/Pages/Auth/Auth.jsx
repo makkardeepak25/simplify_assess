@@ -14,7 +14,7 @@ export function Auth() {
     <Container>
       <Nav>
         <Navicon>
-          <HomeIcon color="secondary" />
+          {/* <HomeIcon color="secondary" /> */}
           <Heading> Simplify Entry</Heading>
         </Navicon>
       </Nav>
