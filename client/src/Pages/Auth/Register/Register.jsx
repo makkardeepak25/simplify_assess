@@ -26,7 +26,7 @@ export function Register() {
   const history = useHistory();
   const [token, setToken] = React.useState("");
   const getSocietyData = () => {
-    axios.get("http://localhost:8000/society").then(res => {
+    axios.get(`${process.env.REACT_APP_HOSTNAME}/society`).then(res => {
       setSocieties(res.data);
     });
   };
@@ -47,7 +47,7 @@ export function Register() {
     };
     // console.log(payload);
     axios
-      .post("http://localhost:8000/user/register", payload)
+      .post(`${process.env.REACT_APP_HOSTNAME}/user/register`, payload)
       .then(res => {
         console.log(res.data.data);
         setToken(res.data.token);
@@ -58,6 +58,9 @@ export function Register() {
         console.log(err.message);
       });
   };
+  const handleLogin = () => {
+    history.push("/auth/login")
+  }
   if (token) {
     <Redirect push to={"/auth/otpauth"} />;
     history.push("/auth/otpauth")
@@ -92,20 +95,17 @@ export function Register() {
           </TextField>
         </Box>
         <Box>
-          <TextField name="password" onChange={handleChange} className={classes.text} variant="outlined" label="Password" />
+          <TextField name="password" type="password" onChange={handleChange} className={classes.text} variant="outlined" label="Password" />
         </Box>
-        <Box>
-          <TextField
-            name="password"
-            onChange={handleChange}
-            className={classes.text}
-            variant="outlined"
-            label="Confirm Password"
-          />
-        </Box>
+        
         <Box>
           <Button onClick={handleClick} className={classes.text} variant="outlined" color="secondary">
             Register
+          </Button>
+        </Box>
+        <Box>
+          <Button onClick={handleLogin} color="primary">
+            GO to Login
           </Button>
         </Box>
       </RegCont>

@@ -7,6 +7,8 @@ import { OtpReg } from "./Auth/OtpReg/OtpReg";
 import { Register } from "./Auth/Register/Register";
 import { Home } from "./Home/Home";
 import { LogBook } from "./LogBook/LogBook";
+import { EntryThanks } from "./LogBook/LogEntry/EntryThanks";
+import { ExitThanks } from "./LogBook/LogEntry/ExitThanks";
 import { LogEntry } from "./LogBook/LogEntry/LogEntry";
 import { LogExit } from "./LogBook/LogEntry/LogExit";
 import { LogHistory } from "./LogBook/LogHistory/LogHistory";
@@ -44,7 +46,10 @@ export function Routes() {
               </Route>
               <Route exact path="/loghistory">
                   <LogHistory/>
-              </Route>
+        </Route>
+        <Route exact path={"/entry/thanks"}><EntryThanks/> </Route>
+        <Route exact path={"/exit/thanks"}><ExitThanks/> </Route>
+
       </Switch>
     </div>
   );

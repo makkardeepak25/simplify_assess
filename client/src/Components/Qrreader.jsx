@@ -9,6 +9,8 @@ export const Qrreader = () => {
       setResult(data);
     }
   };
+  sessionStorage.setItem("soietyQr",JSON.stringify(result))
+  console.log(result)
   const handleError = err => {
     console.error(err);
   };

@@ -14,12 +14,15 @@ const obj = {
   password: "",
   mobile: ""
 };
-
+console.log(process.env.REACT_APP_AUTH_DOMAIN)
 export function Login() {
   const classes = useStyles();
   const [state, setState] = React.useState(obj);
   const [token, setToken] = React.useState("")
   const history = useHistory()
+  const handleRegister = () => {
+    history.push("/auth/register")
+  }
   const handleChange = e => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
@@ -30,12 +33,11 @@ export function Login() {
       password:state.password
     };
     axios
-      .post("http://localhost:8000/user/login", payload)
+      .post(`${process.env.REACT_APP_HOSTNAME}/user/login`, payload)
       .then(res => {
         console.log(res);
         setToken(res.data.token)
         sessionStorage.setItem("loginData",JSON.stringify(res.data.data))
-        // history.push("/user/otpauth")
       })
       .catch(err => {
         console.log(err.response);
@@ -75,6 +77,11 @@ export function Login() {
         <Box>
           <Button onClick={handleClick} className={classes.text} variant="outlined" color="secondary">
             Login
+          </Button>
+        </Box>
+        <Box>
+          <Button onClick={handleRegister} color="primary">
+            GO to register
           </Button>
         </Box>
       </RegCont>

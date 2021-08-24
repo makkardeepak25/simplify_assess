@@ -19,6 +19,11 @@ const generateOTP = () => {
     }
     return otp;
 };
+
+//Register procedure will trigger otp for the user 
+//Currently We need a 3rd part service to send otp for verifications
+//Otp Sending via sms/whatsapp is currently not built. 
+//So for this MVP, please check the otp at backend and use that. 
 const register = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -75,7 +80,7 @@ const login = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     try {
-        const user = await User.findOne({mobile: req.body.mobile})
+        const user = await User.findOne({mobile: req.body.mobile}).populate("societyId")
         if(!user){
             return res.status(401).json({status: "failed",message: "Parent doesnt exist. Kindly Register"})
         }

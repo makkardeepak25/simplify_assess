@@ -21,7 +21,7 @@ export function OtpReg() {
   const [status,setStatus] = React.useState(0);
   var user = sessionStorage.getItem("user")
   user =JSON.parse(user)
-  const userId=user._id
+  const userId=user&&user._id
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -33,7 +33,7 @@ export function OtpReg() {
     };
     console.log(payload)
     axios
-    .post("http://localhost:8000/user/resend-otp", payload)
+    .post(`${process.env.REACT_APP_HOSTNAME}/user/resend-otp`, payload)
     .then(res => {
       setStatus(0);
       // history.push("/user/otpauth")
@@ -49,7 +49,7 @@ export function OtpReg() {
     };
     console.log(payload)
     axios
-    .post("http://localhost:8000/user/verify-otp", payload)
+    .post(`${process.env.REACT_APP_HOSTNAME}/user/verify-otp`, payload)
       .then(res => {
         setStatus(res.status);
       // history.push("/user/otpauth")
@@ -82,7 +82,7 @@ export function OtpReg() {
             label="Enter OTP"
           />
         </Box>
-        {status>0 && status!==200 && <div>Generate a new OTP</div>}
+        {status>0 && status!==200? <div>Generate a new OTP</div>:null}
         <Button onClick={handleResendOtp} disabled={status>0 && status === 200}>Resend OTP!</Button>
         <Box>
           <Button onClick={handleClick} className={classes.text} variant="outlined" color="secondary">

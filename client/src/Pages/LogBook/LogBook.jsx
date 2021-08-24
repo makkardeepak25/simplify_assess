@@ -35,7 +35,11 @@ export function LogBook() {
     const history = useHistory();
     const handleEntry = () => {
         history.push("/logentry")
-    }
+  }
+  const handleLogout = () => {
+    sessionStorage.clear()
+    history.push("/")
+  }
   return (
     <Container>
       <Nav>
@@ -45,20 +49,18 @@ export function LogBook() {
           </Nav>
           <LogCont>
               <Box>
-                  <Button onClick={handleEntry} className={classes.btn} startIcon={<GiEntryDoor/>}>Log Entry</Button>
+                  <Button onClick={handleEntry} className={classes.btn} startIcon={<GiEntryDoor/>}>LogBook Entry</Button>
               </Box>
               <Box>
-                  <Button onClick={()=>{history.push("/logexit")}} className={classes.btn} startIcon={<ImExit/>}>Log Exit</Button>
+                  <Button onClick={()=>{history.push("/logexit")}} className={classes.btn} startIcon={<ImExit/>}>LogBook Exit</Button>
               </Box>
               <Box>
                   <Button onClick={()=>{history.push("/loghistory")}} className={classes.btn} startIcon={<VscHistory/>}>Log History</Button>
               </Box>
               <Box>
-                  <Button onClick={()=>{history.push("/logout")}} className={classes.btn} startIcon={<FiLogOut/>}>Log out</Button>
+                  <Button onClick={handleLogout} className={classes.btn} startIcon={<FiLogOut/>}>Log out</Button>
               </Box>
           </LogCont>
-          
-      
     </Container>
   );
 }

@@ -4,18 +4,12 @@ const router = express.Router()
 
 
 router.post("/", async function (req, res) {
-    var allSoc=Society.findOne({"name":req.body.name}).lean().exec()
-    var society = Society.create(req.body);
     try {
-        if (society.name === allSoc.name) {
-            return res.status(200).send("user already exists")
-        } else {
-            return res.status(200).send("Registered Successfully!")
-        }
-        
+            var society = Society.create(req.body);
+            return res.status(200).json({ message: "Registered Successfully!",data:society })
     }
     catch (e) {
-        return res.status(200).send("Error")
+        return res.status(401).send("Something Went Wrong")
     }
 })
 router.get("/", async function (req, res) {
